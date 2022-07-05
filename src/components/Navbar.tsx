@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 export default function Navbar({
   noShadow = true,
@@ -28,35 +28,50 @@ export default function Navbar({
           <button
             className="navbar-toggler"
             type="button"
-            data-toggle="collapse"
-            data-target="#navbarNav"
-            aria-controls="navbarNav"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
             aria-expanded="false"
             aria-label="Toggle navigation"
           >
             <span className="navbar-toggler-icon"></span>
           </button>
-          <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav mx-5">
-              <li className="nav-item active">
-                <h6>
-                  <a className="nav-link" href="#">
-                    Polls
-                  </a>
-                </h6>
-              </li>
-            </ul>
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            {/* <ul className="navbar-nav me-5">
+              
+            </ul> */}
             <ul className="navbar-nav ms-auto">
               <li className="nav-item">
                 <h6>
-                  <a className="nav-link" href="#">
-                    Account
-                  </a>
+                  <NavLink
+                    className={({ isActive }) =>
+                      isActive
+                        ? 'text-decoration-underline text-primary nav-link ms-2'
+                        : 'nav-link ms-2'
+                    }
+                    to="/poll"
+                  >
+                    Polls
+                  </NavLink>
                 </h6>
               </li>
               <li className="nav-item">
                 <h6>
-                  <Link className="nav-link" to="/login">
+                  <NavLink
+                    to="/"
+                    className={({ isActive }) =>
+                      isActive
+                        ? 'text-decoration-underline text-primary nav-link ms-2'
+                        : 'nav-link ms-2'
+                    }
+                  >
+                    Account
+                  </NavLink>
+                </h6>
+              </li>
+              <li className="nav-item me-4">
+                <h6>
+                  <Link className="nav-link ms-2" to="/login">
                     Logout
                   </Link>
                 </h6>
