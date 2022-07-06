@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { signin } from '../../services/auth';
 import Navbar from '../components/Navbar';
 
 export default function Login() {
-  const [user, setUser] = useState({
+  const initialUserState = {
     phone: '',
     password: '',
-  });
-  const [error, setError] = useState({
-    phone: '',
-    password: '',
-  });
+  };
+  const [user, setUser] = useState(initialUserState);
+  const [error, setError] = useState(initialUserState);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setUser({
@@ -19,7 +20,7 @@ export default function Login() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!user.phone) {
@@ -27,7 +28,20 @@ export default function Login() {
     } else if (!user.password) {
       setError({ ...error, password: 'Password is required' });
     } else {
-      console.log(user);
+      signin(user)
+        .then(async (res) => {
+          try {
+            localStorage.setItem('user', JSON.stringify(res.data)),
+              toast.success(`Welcome back, ${res.data.names}`);
+            setUser(initialUserState);
+            navigate('/polls');
+          } catch (error) {
+            toast.error(error.message);
+          }
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message);
+        });
     }
   };
 

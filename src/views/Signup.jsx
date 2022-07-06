@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { signup } from '../../services/auth';
 import Navbar from '../components/Navbar';
 
 export default function Signup() {
@@ -41,7 +42,20 @@ export default function Signup() {
     } else if (user.password != user.confirmpassword) {
       setError({ ...error, confirmpassword: 'Passwords do not match' });
     } else {
-      console.log(user);
+      signup(user)
+        .then(async (res) => {
+          try {
+            localStorage.setItem('user', JSON.stringify(res.data)),
+              toast.success(`Welcome back, ${res.data.names}`);
+            setUser(initialUserState);
+            navigate('/polls');
+          } catch (error) {
+            toast.error(error.message);
+          }
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message);
+        });
     }
   };
 
